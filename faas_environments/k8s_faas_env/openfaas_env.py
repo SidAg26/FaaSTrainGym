@@ -6,6 +6,7 @@ import numpy as np
 
 import gymnasium as gym
 from gymnasium import spaces
+import defaults as defaults
 from context import Context 
 
 import tensorflow as tf
@@ -15,18 +16,15 @@ class Environment(gym.Env):
     # every environment should support None render mode
     metadata = {'render_modes': ['human', None]}
 
-    def __init__(self, ctx:Context, rew_range=(-100, 10000), min_pods=1, max_pods=24) -> None:
+    def __init__(self, ctx:Context) -> None:
         super(Environment, self).__init__()
 
         # Context object for Kubernetes and Prometheus API
         self.ctx = ctx
         
         # FIXED PARAMETERS / Configurable
-        self.reward_range = rew_range
-        self.MAX_PODS = max_pods
-        self.MIN_PODS = min_pods
 
-        self.sampling_window = 30 
+
         self.timestep = 0
         self.episode = 0
         self.loop = 0
@@ -37,8 +35,8 @@ class Environment(gym.Env):
         self.score = 0
         # [avg_execution, throughput, requests, replicas, avg_cpu/req, avg_mem/req]
         self.observation_space = spaces.Box(
-                                    low=np.array([0, 0, 0, self.MIN_PODS, 0, 0]), 
-                                    high=np.array([60, 100, 100, self.MAX_PODS, 2, 2]), 
+                                    low=np.array([0, 0, 0, defaults.MIN_REPLICAS, 0, 0]), 
+                                    high=np.array([60, 100, 100, defaults.MAX_REPLICAS, 2, 2]), 
                                     shape=(6,), 
                                     dtype=np.float64)
         
@@ -86,7 +84,7 @@ class Environment(gym.Env):
         action_feedback = False
 
         if action < 0 :
-            if (scale_value >= self.MIN_PODS):
+            if (scale_value >= defaults.MIN_REPLICAS):
                 action_feedback = True
                 body = {'spec': {'replicas': scale_value}}
                 try:
@@ -106,7 +104,7 @@ class Environment(gym.Env):
                 action_feedback = False
 
         else:
-            if (scale_value <= self.MAX_PODS and scale_value >= self.MIN_PODS):
+            if (scale_value <= defaults.MAX_REPLICAS and scale_value >= defaults.MIN_REPLICAS):
                 action_feedback = True
                 body = {'spec': {'replicas': scale_value}}
                 try:
@@ -266,14 +264,14 @@ class Environment(gym.Env):
         r_th = alpha * (throughput ** 2)
         r_cpu = beta * (avg_cpu*100)
         r_mem = gamma * (avg_mem*100)
-        r_rep = -phi * ((replicas - self.MIN_PODS) ** 2)
+        r_rep = -phi * ((replicas - defaults.MIN_REPLICAS) ** 2)
 
         reward = r_th + r_cpu + r_mem + r_rep
         reward = round(reward, 2)
 
         # action unsuccessful
         if (meta_scale_value != replicas):
-            reward += self.reward_range[0]
+            reward += defaults.MIN_REWARD
         
         return reward
     
@@ -311,7 +309,7 @@ class Environment(gym.Env):
             return self._last_obs, -100, done, False, info 
         else:
             # wait for the sampling window to get the next observation
-            time.sleep(self.sampling_window)
+            time.sleep(defaults.SAMPLING_INTERVAL)
 
             # get the next observation
             next_obs = self._get_obs()
