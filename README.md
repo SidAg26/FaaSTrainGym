@@ -7,7 +7,7 @@ An open-source Gymnasium compatible Serverless/FaaS environment for Reinforcemen
 
 To install the base Gymnasium library, use `pip install gymnasium` <br>
 To install the official Kubernetes Python client, use `pip install kubernetes` <br>
-To install the Prometheus Python client, use `pip install prometheus-client` <br>
+To install the Prometheus Python client, use `pip install prometheus-api-client` <br>
 
 ## Current Python Support
 
