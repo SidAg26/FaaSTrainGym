@@ -22,5 +22,13 @@ MIN_LATENCY = 0 # ms
 MAX_LATENCY = 900000 # 15 minutes - 900000 ms
 MIN_REWARD = -100 # penalty for invalid actions
 MAX_REWARD = 10000 # maximum reward for valid actions
+MIN_UTILIZATION = 0 # % CPU/memory utilization
+MAX_UTILIZATION = 100 # % CPU/memory utilization
+
+MIN_ACTION = 0 # minimum number of replicas to scale
+MAX_ACTION = 10 # maximum number of replicas to scale
+
 
 SAMPLING_INTERVAL = 30 # seconds
+FUNCTION_CPU_REQUEST = 100 # m
+FUNCTION_MEMORY_REQUEST = 128 # MB
