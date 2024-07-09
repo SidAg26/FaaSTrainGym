@@ -7,24 +7,54 @@ import numpy as np
 import gymnasium as gym
 from gymnasium import spaces
 import defaults as defaults
-from context import Context 
+from .context import Context 
+from .observation import Observation
+from .action import Action
 
 import tensorflow as tf
 
 class Environment(gym.Env):
+    # This is an example of a custom environment for OpenFaaS on Kubernetes for
+    # the FaaSTrainGym_v1 library. The environment is based on the OpenAI Gym/Gymnasium
+    # interface. The environment is designed to be used with Function Scaling APIs and RL
+    # algorithms for scaling functions in a Kubernetes cluster.
+
 
     # every environment should support None render mode
-    metadata = {'render_modes': ['human', None]}
+    metadata = {'render_modes': ['human', 'tensorflow', None]}
 
-    def __init__(self, ctx:Context) -> None:
+    def __init__(self, ctx:Context, 
+                 func_cpu: int = defaults.FUNCTION_CPU_REQUEST, 
+                 func_mem: int = defaults.FUNCTION_MEMORY_REQUEST, 
+                 render_mode=None) -> None:
         super(Environment, self).__init__()
 
-        # Context object for Kubernetes and Prometheus API
+        # TODO Step1: Context object for Kubernetes and Prometheus API
         self.ctx = ctx
         
-        # FIXED PARAMETERS / Configurable
+        # TODO Step2: Define the Observation object
+        # [avg_execution, throughput, requests, replicas, avg_cpu/req, avg_mem/req]
+        _observation = Observation(ctx=self.ctx)
+        self.observation_space = _observation.get_observation_space()
 
+        # TODO Step3: Define the function CPU and Memory requests
+        self.func_cpu = func_cpu 
+        self.func_mem = round(func_mem / 1024, 2) # converting to Gi
+        
+        # TODO Step4: Check the render mode for logging
+        assert render_mode in self.metadata['render_modes'], f"Invalid render mode {render_mode}"
+        self.render_mode = render_mode
 
+        if self.render_mode == 'tensorflow':
+            model_name = 'model-' + datetime.now().strftime("%Y%m%d-%H%M%S")
+            self.set_log_writing(model_name)
+
+        # TODO Step5: Define the Action object
+        _action = Action(ctx=self.ctx)
+        self.action_space = _action.get_action_space()
+        self._action_to_scale = _action.get_action_mapping()
+
+        # TODO Step6: Configurable Environment Parameters
         self.timestep = 0
         self.episode = 0
         self.loop = 0
@@ -33,36 +63,15 @@ class Environment(gym.Env):
 
         self.reward_history = []
         self.score = 0
-        # [avg_execution, throughput, requests, replicas, avg_cpu/req, avg_mem/req]
-        self.observation_space = spaces.Box(
-                                    low=np.array([0, 0, 0, defaults.MIN_REPLICAS, 0, 0]), 
-                                    high=np.array([60, 100, 100, defaults.MAX_REPLICAS, 2, 2]), 
-                                    shape=(6,), 
-                                    dtype=np.float64)
         
-        # action is either increase or decrease pods
-        self.action_space = spaces.Discrete(5)
-        self._action_to_scale = {0: -2,
-                                 1: -1,
-                                 2: 0,
-                                 3: 1,
-                                 4: 2}
-        self._initial_setup()
 
         
- 
-
-    def _initial_setup(self):
-        # function resource requests
-        self.func_cpu = 150 # millicores
-        self.func_mem = round((256/1024), 2) # in GBi
-
+    def set_log_writing(self, model_name:str):
         # custom metrics from env
         logdir = "logs/" + datetime.now().strftime("%Y%m%d-%H%M%S")
-        self.file_writer = tf.summary.create_file_writer(logdir + "/${MODEL_NAME}")
+        self.file_writer = tf.summary.create_file_writer(logdir + f"/{model_name}")
         self.file_writer.set_as_default() 
-
-        self._reward_file = 'reward_history_${MODEL_NAME}.json'
+        self._reward_file = f'reward_history_{model_name}.json'
 
     def _get_info(self):
         return {}
