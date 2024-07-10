@@ -17,7 +17,7 @@ class Environment(gym.Env):
     # every environment should support None render mode
     metadata = {'render_modes': ['human', 'tensorflow', None]}
 
-    def __init__(self, ctx:Context | None, 
+    def __init__(self, ctx:Context | None = None, 
                  func_cpu: int = defaults.FUNCTION_CPU_REQUEST, 
                  func_mem: int = defaults.FUNCTION_MEMORY_REQUEST,
                  min_action: int = defaults.MIN_ACTION,
