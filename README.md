@@ -14,7 +14,7 @@ To install the Prometheus Python client, use `pip install prometheus-api-client`
 
 Gymnasium API - Python 3.8+ on Linux and MacOS. For updates, please check the [official documentation](https://github.com/Farama-Foundation/Gymnasium)  
 Kubernetes Python Client - Python 3.6+ on Linux and MacOS. For updates, please check the [official documentation](https://github.com/kubernetes-client/python)  
-Prometheus Python Client - For updates, please check the [official documentation](https://github.com/prometheus/client_python?tab=readme-ov-file)  
+Prometheus Python Client - For updates, please check the [official documentation](https://github.com/4n4nd/prometheus-api-client-python)  
 
 ## Gymnasium Environment for Serverless Reinforcement Learning Agents
 
@@ -60,4 +60,4 @@ env = gymnasium.make('FaaSTranGym-v1')
 
 ### Monitoring:
 - [Monitoring with Prometheus](https://prometheus.io/)
-- [Using Prometheus API Client for Python](https://github.com/prometheus/client_python?tab=readme-ov-file)
+- [Using Prometheus API Client for Python](https://github.com/4n4nd/prometheus-api-client-python)
