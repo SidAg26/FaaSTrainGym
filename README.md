@@ -4,7 +4,7 @@ An open-source Gymnasium compatible Serverless/FaaS environment for Reinforcemen
 
 ---
 
-## Installation
+## Pre-Requisite Packages
 
 To install the base Gymnasium library, use `pip install gymnasium`  
 To install the official Kubernetes Python client, use `pip install kubernetes`  
@@ -12,11 +12,9 @@ To install the Prometheus Python client, use `pip install prometheus-api-client`
 
 ## Current Python Support
 
-Gymnasium API - Python 3.8+ on Linux and MacOS. For updates, please check the [official documentation](https://github.com/Farama-Foundation/Gymnasium) <br>
-Kubernetes Python Client - Python 3.6+ on Linux and MacOS. For updates, please check the [official documentation](https://github.com/kubernetes-client/python)
-Prometheus Python Client - For updates, please check the [official documentation](https://github.com/prometheus/client_python?tab=readme-ov-file)
-
----
+Gymnasium API - Python 3.8+ on Linux and MacOS. For updates, please check the [official documentation](https://github.com/Farama-Foundation/Gymnasium)  
+Kubernetes Python Client - Python 3.6+ on Linux and MacOS. For updates, please check the [official documentation](https://github.com/kubernetes-client/python)  
+Prometheus Python Client - For updates, please check the [official documentation](https://github.com/prometheus/client_python?tab=readme-ov-file)  
 
 ## Gymnasium Environment for Serverless Reinforcement Learning Agents
 
@@ -36,4 +34,30 @@ The environment consists of the following components:
 2. __Actions (A)__: The agent can take two `Discrete` actions: __scale-up__ and __scale-down__ to increase or decrease the number of serverless functions deployed as Kubernetes Pods.
 3. __Rewards (R)__: The agent receives a reward based on the performance metrics of the functions. The goal is to minimize the number of function pods and maximize their performance such as improving the throughput, average CPU and memory utilisation.
 4. __Observations (O)__: The agent receives the current state of the environment as an observation. The observation consists of the current state of the environment and the performance metrics of the serverless functions.
-5. __Termination__: As the process of scaling is non-episodic/continuous, an episode terminates when the agent reaches the maximum number of episodes (`default 10` steps) and a `done` signal is sent to the agent.
+5. __Termination__: As the process of scaling is non-episodic/continuous, an episode terminates when the agent reaches the maximum number of episodes (`default 20` steps) and a `done` signal is sent to the agent.
+
+### FaaSTrainGym Installation
+
+To install the environment, use the following command:
+
+`pip install -e FaaSTrainGym_v1`
+
+### FaaSTrainGym Usage
+
+To use the environment, use the following code snippet:
+
+```python
+import faas_environments
+env = gymnasium.make('FaaSTranGym-v1')
+```
+
+## Reference Links
+
+### Development and Deployment:
+- [Creating Environments with Gymnasium API](https://gymnasium.farama.org/tutorials/gymnasium_basics/environment_creation/)
+- [Serverless Functions with OpenFaaS](https://www.openfaas.com/)
+- [Container Orchestration with Kubernetes](https://kubernetes.io/)
+
+### Monitoring:
+- [Monitoring with Prometheus](https://prometheus.io/)
+- [Using Prometheus API Client for Python](https://github.com/prometheus/client_python?tab=readme-ov-file)
