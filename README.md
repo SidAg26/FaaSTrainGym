@@ -40,7 +40,9 @@ The environment consists of the following components:
 
 To install the environment, use the following command:
 
-`pip install -e FaaSTrainGym_v1`
+```bash
+pip install -e ./FaaSTrainGym_v1
+```
 
 ### FaaSTrainGym Usage
 
