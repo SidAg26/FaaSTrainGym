@@ -1,5 +1,4 @@
-import defaults as defaults
-import numpy as np
+from . import defaults as defaults
 
 
 class Reward:
