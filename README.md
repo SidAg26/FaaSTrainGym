@@ -50,7 +50,7 @@ To use the environment, use the following code snippet:
 
 ```python
 import faas_environments
-env = gymnasium.make('FaaSTranGym-v1')
+env = gymnasium.make('FaaSTrainGym-v1')
 ```
 
 ## Reference Links
