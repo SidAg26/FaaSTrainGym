@@ -41,7 +41,8 @@ class Environment(gym.Env):
         # TODO Step2: Define the Observation object
         # [avg_execution, throughput, requests, replicas, avg_cpu/req, avg_mem/req]
         self._observation = Observation(ctx=self.ctx, metrics=self.metrics)
-        # self.observation_space = self._observation.get_observation_space()
+        # Environment must define the observation space variable
+        self.observation_space = self._observation.get_observation_space()
 
         # TODO Step3: Define the function CPU and Memory requests
         self.func_cpu = func_cpu 
@@ -59,7 +60,8 @@ class Environment(gym.Env):
         self._action = Action(ctx=self.ctx, metrics=self.metrics, 
                               min_action=min_action, max_action=max_action,
                               min_replicas=min_replicas, max_replicas=max_replicas)
-        # self.action_space = self._action.get_action_space()
+        # Environment must define the action space variable
+        self.action_space = self._action.get_action_space()
         
         # TODO Step6: Define the Reward object
         self._reward = Reward(min_reward=min_reward,
