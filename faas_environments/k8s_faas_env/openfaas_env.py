@@ -1,6 +1,6 @@
 import time as time
 import gymnasium as gym
-import defaults as defaults
+from . import defaults as defaults
 from .context import Context 
 from .observation import Observation
 from .action import Action

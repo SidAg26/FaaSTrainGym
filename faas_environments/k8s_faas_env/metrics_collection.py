@@ -1,5 +1,5 @@
 from .context import Context
-import defaults as defaults
+from . import defaults as defaults
 
 import math as math
 

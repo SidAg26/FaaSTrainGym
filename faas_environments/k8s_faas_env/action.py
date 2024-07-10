@@ -1,6 +1,6 @@
 from .context import Context
 from .metrics_collection import MetricsCollection
-import defaults as defaults
+from . import defaults as defaults
 from gymnasium import spaces
 
 

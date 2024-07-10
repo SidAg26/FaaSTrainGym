@@ -1,6 +1,6 @@
 import numpy as np
+from . import defaults as defaults
 from .context import Context
-import defaults as defaults
 from .metrics_collection import MetricsCollection
 from gymnasium import spaces
 

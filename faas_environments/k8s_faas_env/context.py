@@ -1,5 +1,5 @@
 import os
-import defaults
+from . import defaults as defaults
 from kubernetes import client, config
 from prometheus_api_client import PrometheusConnect
 
