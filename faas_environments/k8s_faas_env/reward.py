@@ -1,16 +1,14 @@
+from ..reward import Reward as BaseReward
 from . import defaults as defaults
 
 
-class Reward:
+class Reward(BaseReward):
     def __init__(self, 
                  min_reward: int = defaults.MIN_REWARD, 
                  max_reward: int = defaults.MAX_REWARD,
                  min_replicas: int = defaults.MIN_REPLICAS):
-        self.reward = 0
-        self.observation = None
-        self.metadata = None
-        self.min_reward = min_reward
-        self.max_reward = max_reward
+        super().__init__(min_reward, max_reward)
+
         self.min_replicas = min_replicas
         
 
@@ -51,7 +49,7 @@ class Reward:
         
         return self.reward
     
-    def get_reward(self, observation, metadata):
+    def get_reward(self, observation, metadata: dict=None):
         return self._compute_reward(observation, metadata)
     
 

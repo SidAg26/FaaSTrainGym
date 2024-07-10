@@ -1,15 +1,18 @@
+from ..action import Action as BaseAction
 from .context import Context
 from .metrics_collection import MetricsCollection
 from . import defaults as defaults
 from gymnasium import spaces
 
 
-class Action:
+class Action(BaseAction):
     def __init__(self, ctx: Context, metrics: MetricsCollection,
                  min_action: int = defaults.MIN_ACTION, 
                  max_action: int = defaults.MAX_ACTION,
                  min_replicas: int = defaults.MIN_REPLICAS,
                  max_replicas: int = defaults.MAX_REPLICAS):
+        
+        super().__init__(min_action, max_action)
         self.ctx = ctx
         self.metrics = metrics
         if min_action < 0:
@@ -25,17 +28,13 @@ class Action:
         if min_replicas > max_replicas:
             raise ValueError('Minimum replicas value must be less than or equal to maximum replicas value.')
         
-        self.min_action = min_action 
-        self.max_action = max_action 
         self.min_replicas = min_replicas
         self.max_replicas = max_replicas
         self._k8s_scale_api = self.ctx.get_k8s_scale_api()
         self._k8s_deployment_name = self.ctx.get_k8s_deployment_name()
         self._k8s_deployment_namespace = self.ctx.get_k8s_deployment_namespace()
         self.info = {}
-        self.action_mapping = None
-        self.action_space = None
-        self.action_space = spaces.Discrete(max_action - min_action + 1)
+
 
 
     def set_action_to_scale(self):

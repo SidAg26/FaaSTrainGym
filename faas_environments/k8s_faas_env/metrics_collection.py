@@ -1,15 +1,14 @@
+from ..metrics_collection import MetricsCollection as BaseMetricsCollection
 from .context import Context
 from . import defaults as defaults
 
 import math as math
 
 
-class MetricsCollection:
-    def __init__(self, ctx: Context, sampling_window: int = defaults.SAMPLING_INTERVAL):
-        self.ctx = ctx
-        assert sampling_window > 0, 'Sampling window must be greater than zero.'
-        self.sampling_window = sampling_window
-        self.success_code = defaults.SUCCESS_CODE
+class MetricsCollection(BaseMetricsCollection):
+    def __init__(self, ctx: Context, sampling_window: int = defaults.SAMPLING_INTERVAL, success_code: int = defaults.SUCCESS_CODE):
+        super().__init__(sampling_window, success_code)
+        self.ctx = ctx 
 
         self.k8s_resource_api = self.ctx.get_k8s_resource_api() 
         self.prometheus_api = self.ctx.get_prometheus_api()
