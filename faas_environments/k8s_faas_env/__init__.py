@@ -1,1 +1,1 @@
-from faas_environments.k8s_faas_env.openfaas_env import Environment
+from faas_environments.k8s_faas_env.openfaas_env import Environment as OpenFaasEnv
