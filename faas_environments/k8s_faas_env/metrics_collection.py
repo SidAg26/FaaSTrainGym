@@ -119,7 +119,7 @@ class MetricsCollection:
                 elif cpu.endswith('u'):
                     cpu_utilization += (round(int(cpu.split('u')[0])/1e3, 4))
                 elif cpu.endswith('m'):
-                    cpu_utilization += (round(int(c.split('m')[0]), 4))
+                    cpu_utilization += (round(int(cpu.split('m')[0]), 4))
                 else:
                     cpu_utilization += 0
             except Exception as _:
