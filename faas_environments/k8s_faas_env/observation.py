@@ -1,11 +1,12 @@
 import numpy as np
 from .context import Context
-from .defaults import defaults
+import defaults as defaults
+from .metrics_collection import MetricsCollection
 from gymnasium import spaces
 
 
 class Observation:
-    def __init__(self, ctx: Context, 
+    def __init__(self, ctx: Context, metrics: MetricsCollection,
                  min_replicas: int = defaults.MIN_REPLICAS, 
                  max_replicas: int = defaults.MAX_REPLICAS, 
                  min_requests: int = defaults.MIN_REQUESTS,
@@ -18,6 +19,7 @@ class Observation:
                  max_utilization: int = defaults.MAX_UTILIZATION):
 
         self.ctx = ctx # Context object
+        self.metrics = metrics # MetricsCollection object
         self.observation_space = None
         self.observation_space = spaces.Box(
                                     low=np.array([min_latency, min_throughput, min_requests, min_replicas, min_utilization, min_utilization]), 
@@ -26,7 +28,7 @@ class Observation:
                                     dtype=np.float64)   
 
     def set_observation_space(self,   
-                 min_replicas: int = defaults.MIN_REPLICA, 
+                 min_replicas: int = defaults.MIN_REPLICAS, 
                  max_replicas: int = defaults.MAX_REPLICAS, 
                  min_requests: int = defaults.MIN_REQUESTS,
                  max_requests: int = defaults.MAX_REQUESTS, 
@@ -49,10 +51,10 @@ class Observation:
     
     def get_observation(self):
         # Get the current latency, throughput, requests, replicas, CPU utilization, and memory utilization
-        latency = self.ctx.get_prometheus_api().get_latency()
-        throughput = self.ctx.get_prometheus_api().get_throughput()
-        requests = self.ctx.get_prometheus_api().get_requests()
-        replicas = self.ctx.get_prometheus_api().get_replicas()
-        cpu_utilization = self.ctx.get_prometheus_api().get_cpu_utilization()
-        memory_utilization = self.ctx.get_prometheus_api().get_memory_utilization()
-        return np.array([latency, throughput, requests, replicas, cpu_utilization, memory_utilization])
+        average_execution = self.metrics.get_latency()
+        replicas = self.metrics.get_replicas()
+        requests = self.metrics.get_requests()
+        throughput = self.metrics.get_throughput(total_requests=requests)
+        cpu_utilization = self.metrics.get_cpu_utilization()
+        memory_utilization = self.metrics.get_memory_utilization()
+        return np.array([average_execution, throughput, requests, replicas, cpu_utilization, memory_utilization])

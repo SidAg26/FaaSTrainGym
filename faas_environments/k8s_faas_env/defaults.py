@@ -20,8 +20,8 @@ MIN_THROUGHPUT = 0 # % requests per sampling interval
 MAX_THROUGHPUT = 100 # % requests per sampling interval
 MIN_LATENCY = 0 # ms
 MAX_LATENCY = 900000 # 15 minutes - 900000 ms
-MIN_REWARD = -100 # penalty for invalid actions
-MAX_REWARD = 10000 # maximum reward for valid actions
+MIN_REWARD = -1000 # penalty for invalid actions
+MAX_REWARD = 1000 # maximum reward for valid actions
 MIN_UTILIZATION = 0 # % CPU/memory utilization
 MAX_UTILIZATION = 100 # % CPU/memory utilization
 
@@ -32,3 +32,5 @@ MAX_ACTION = 10 # maximum number of replicas to scale
 SAMPLING_INTERVAL = 30 # seconds
 FUNCTION_CPU_REQUEST = 100 # m
 FUNCTION_MEMORY_REQUEST = 128 # MB
+SUCCESS_CODE = 200 # HTTP status code for successful requests
+EPISODES = 100 # number of episodes to run
