@@ -53,11 +53,13 @@ env = gymnasium.make('FaaSTranGym-v1')
 
 ## Reference Links
 
-### Development and Deployment:
+### Development and Deployment
+
 - [Creating Environments with Gymnasium API](https://gymnasium.farama.org/tutorials/gymnasium_basics/environment_creation/)
 - [Serverless Functions with OpenFaaS](https://www.openfaas.com/)
 - [Container Orchestration with Kubernetes](https://kubernetes.io/)
 
-### Monitoring:
+### Monitoring
+
 - [Monitoring with Prometheus](https://prometheus.io/)
 - [Using Prometheus API Client for Python](https://github.com/4n4nd/prometheus-api-client-python)
