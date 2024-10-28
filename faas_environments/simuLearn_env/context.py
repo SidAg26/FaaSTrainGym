@@ -48,6 +48,11 @@ class Context:
             raise ValueError('Dataframe is not loaded.')
         return self.df['Input'].unique()
     
+    def get_execution_time_range(self):
+        if self.df is None:
+            raise ValueError('Dataframe is not loaded.')
+        return self.df['Duration'].min(), self.df['Duration'].max()
+    
     def get_execution_time(self, memory:int, input:int):
         if self.df is None:
             raise ValueError('Dataframe is not loaded.')

@@ -14,8 +14,11 @@ class Observation(BaseObservation):
         self.step_size = step_size
         self.observation = None
         # Memory, Input, Duration, Status
-        _input = len([i for i in range(10, 10000, 100)])
-        self.observation_space = spaces.MultiDiscrete([24, _input, ])
+        _input = len(self.ctx.get_unique_input()) # number of unique input values
+        _memory_list = len(self.ctx.get_unique_memory()) # number of unique memory values
+        _, _duration = self.ctx.get_execution_time_range() # min and max execution time
+        _status = len(defaults.STATUS) # number of status values
+        self.observation_space = spaces.MultiDiscrete([_memory_list, _input, _duration, _status])
 
     
     def set_observation_space(self, min_latency: int, max_latency: int, 
@@ -24,6 +27,9 @@ class Observation(BaseObservation):
                     min_replicas: int, max_replicas: int, 
                     min_utilization: int, max_utilization: int):
         pass
+        
+    def _set_observation(self, observation):
+        self.observation = observation
 
     def get_observation_space(self):
         return self.observation_space
@@ -31,9 +37,6 @@ class Observation(BaseObservation):
     @singledispatch
     def get_observation(self):
         return self.observation
-    
-    def _set_observation(self, observation):
-        self.observation = observation
     
     @singledispatch
     def get_observation(self, input:int, memory:int):
